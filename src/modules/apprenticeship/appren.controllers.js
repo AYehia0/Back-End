@@ -3,7 +3,7 @@ const Response = require("../../helpers/response.js")
 const statusCodes = require("../../helpers/status.js")
 const apprenValidations = require("./appren.validations.js")
 const apprenServices = require("./appren.services.js")
-const { SUCCESS_ADD,SUCCESS_UPDATE,SUCCESS_READ,NOT_FOUND_FAIL,SUSCCESS_DELETE } = require("../../helpers/message.js")
+const { SUCCESS_ADD,SUCCESS_UPDATE,SUCCESS_READ,NOT_FOUND_FAIL,SUSCCESS_DELETE, AUTH_FAIL } = require("../../helpers/message.js")
 
 // create an apprenticeship
 const createAppren = async (req, res) => {
@@ -63,6 +63,32 @@ const getAppren = async (req, res) => {
     }
 }
 
+// get a shareable apprenticeship
+const shareAppren = async (req,res) =>{   
+ 
+    try {
+        let doc
+        if (req.params.id && req.params.user)
+            doc = apprenValidations.shareAppren(req.params) 
+        const firebaseData = await apprenServices.shareAppren(doc.user,doc.id)
+
+
+        if(!firebaseData){
+            res.send(new Response(false , AUTH_FAIL, firebaseData))
+        } else{
+            res.send(new Response(true, SUCCESS_READ, firebaseData))
+        }
+
+
+    } catch(e) {
+        res.status(statusCodes.BAD).send(new Response(
+            false,
+            e instanceof ZodError ? JSON.parse(e.message) : e.message,
+            ""
+        ))
+    }
+}
+
 // delete an apprenticeship
 const deleteAppren = async (req, res) => {
     try {
@@ -82,5 +108,6 @@ module.exports = {
     createAppren,
     updateAppren,
     getAppren,
+    shareAppren,
     deleteAppren 
 }

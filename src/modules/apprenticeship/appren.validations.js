@@ -43,6 +43,7 @@ const createTeamAdmin = () => {
 
 const createAppren = (data) => {
     const Apprenticeship = z.object({
+        share: z.boolean(),
         title: z.string().trim(),
         company_logo: z.string().url().trim(),
         company_desc: z.string().trim(),
@@ -62,6 +63,7 @@ const createAppren = (data) => {
 
 const updateAppren = (data) => {
     const Apprenticeship = z.object({
+        share: z.boolean.optional(),
         title: z.string().optional(),
         company_logo: z.string().url().optional(),
         company_desc: z.string().optional(),
@@ -82,6 +84,15 @@ const updateAppren = (data) => {
     return Apprenticeship.parse(data)
 }
 
+const shareAppren =(data) => {
+    const User_Id = z.object({
+        user: z.string(),
+        id: z.string()
+    })
+
+    return User_Id.parse(data)
+}
+
 const validateId =(data) => {
     const Id = z.object({
         id: z.string().trim().min(1)
@@ -90,9 +101,12 @@ const validateId =(data) => {
     return Id.parse(data)
 }
 
+
+
 module.exports = {
     createAppren,
     updateAppren,
+    shareAppren,
     validateId,
 }
 

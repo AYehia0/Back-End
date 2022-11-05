@@ -41,6 +41,22 @@ const getAppren = async (userId, docId, ref = dbRef) => {
     return snapshot.data() || {}
 }
 
+const shareAppren = async (userId ,docId, ref = dbRef) => {
+    const snapshot = await ref.collection("apprenticeship")
+        .doc(userId)
+        .collection("apprenList")
+        .doc(docId)
+        .get()
+
+    if(snapshot.data()){
+        // check if source is public
+        if(snapshot.data().share){
+            return snapshot.data() || {}
+        }
+}
+}
+
+
 const deleteAppren = async (userId, docId, ref = dbRef) => {
     return await ref.collection("apprenticeship")
         .doc(userId) // This should be a passable parameter
@@ -52,5 +68,6 @@ module.exports = {
     createAppren,
     updateAppren,
     getAppren,
+    shareAppren,
     deleteAppren 
 }
