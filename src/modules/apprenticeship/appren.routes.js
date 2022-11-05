@@ -11,6 +11,9 @@ router.put("/appren/:id", isAuthorized, apprenControllers.updateAppren)
 // get apprenticeship/s
 router.get("/appren/:id?", isAuthorized, apprenControllers.getAppren)
 
+// get apprenticeship/s by share link
+router.get("/appren/:user/:id", apprenControllers.shareAppren)
+
 // delete an apprenticeship
 router.delete("/appren/:id", isAuthorized, apprenControllers.deleteAppren)
 
